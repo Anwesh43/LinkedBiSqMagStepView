@@ -11,6 +11,7 @@ import android.graphics.Paint
 import android.graphics.Color
 import android.app.Activity
 import android.content.Context
+import android.util.Log
 
 val nodes : Int = 5
 val lines : Int = 4
@@ -46,5 +47,27 @@ class BiSqMagStepView(ctx : Context) : View(ctx) {
             }
         }
         return true
+    }
+
+    data class State(var scale : Float = 0f, var dir : Float = 0f, var prevScale : Float = 0f) {
+
+        fun update(cb : (Float) -> Unit) {
+            val k : Float = scale.updateScale(dir, lines)
+            scale += k
+            Log.d("update scale is ", "$k")
+            if (Math.abs(scale - prevScale) > 1) {
+                scale = prevScale + dir
+                dir = 0f
+                prevScale = scale
+                cb(prevScale)
+            }
+        }
+
+        fun startUpdating(cb : () -> Unit) {
+            if (dir == 0f) {
+                dir = 1f - 2 * prevScale
+                cb()
+            }
+        }
     }
 }
