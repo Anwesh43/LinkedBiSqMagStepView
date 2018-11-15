@@ -21,6 +21,16 @@ val SIZE_FACTOR : Int = 3
 val STRKE_FACTOR : Int = 80
 val FORE_GROUND_COLOR : Int = Color.parseColor("#283593")
 
+fun Int.getInverse() : Float = 1f / this
+
+fun Float.divideScale(i : Int, n : Int) : Float = Math.min(n.getInverse(), Math.max(0f, this - i * n.getInverse())) * n
+
+fun Float.getScaleFactor() : Float = Math.floor(this / scDiv).toFloat()
+
+fun Int.getMirror(k : Float) : Float = getInverse() * (1 - k) + k
+
+fun Float.updateScale(dir : Float, a : Int) : Float = scGap * dir * a.getMirror(getScaleFactor())
+
 class BiSqMagStepView(ctx : Context) : View(ctx) {
 
     private val paint : Paint = Paint(Paint.ANTI_ALIAS_FLAG)
