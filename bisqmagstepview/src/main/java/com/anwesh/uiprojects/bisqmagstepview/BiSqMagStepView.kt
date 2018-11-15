@@ -20,3 +20,21 @@ val scDiv : Double = 1.0 / parts
 val SIZE_FACTOR : Int = 3
 val STRKE_FACTOR : Int = 80
 val FORE_GROUND_COLOR : Int = Color.parseColor("#283593")
+
+class BiSqMagStepView(ctx : Context) : View(ctx) {
+
+    private val paint : Paint = Paint(Paint.ANTI_ALIAS_FLAG)
+
+    override fun onDraw(canvas : Canvas) {
+
+    }
+
+    override fun onTouchEvent(event : MotionEvent) : Boolean {
+        when (event.action) {
+            MotionEvent.ACTION_DOWN -> {
+
+            }
+        }
+        return true
+    }
+}
