@@ -199,4 +199,26 @@ class BiSqMagStepView(ctx : Context) : View(ctx) {
             curr.startUpdating(cb)
         }
     }
+
+    data class Renderer(var view : BiSqMagStepView) {
+        private val animator : Animator = Animator(view)
+
+        private val bsms : BiSqMagStep = BiSqMagStep(0)
+
+        fun render(canvas : Canvas, paint : Paint) {
+            canvas.drawColor(Color.parseColor("#212121"))
+            bsms.draw(canvas, paint)
+            animator.animate {
+                bsms.update {i, scl ->
+                    animator.stop()
+                }
+            }
+        }
+
+        fun handleTap() {
+            bsms.startUpdating {
+                animator.start()
+            }
+        }
+    }
 }
