@@ -223,4 +223,13 @@ class BiSqMagStepView(ctx : Context) : View(ctx) {
             }
         }
     }
+
+    companion object {
+
+        fun create(activity : Activity) : BiSqMagStepView {
+            val view : BiSqMagStepView = BiSqMagStepView(activity)
+            activity.setContentView(view)
+            return view
+        }
+    }
 }
