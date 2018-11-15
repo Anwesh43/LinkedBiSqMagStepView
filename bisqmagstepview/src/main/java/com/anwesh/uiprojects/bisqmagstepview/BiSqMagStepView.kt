@@ -38,25 +38,28 @@ fun Int.iFact() : Int = this / 2
 
 fun Int.irFact() : Int = (rFact() + iFact()).rFact()
 
+fun Int.getSC() : Float = 1f - 2 * this
+
 fun Canvas.drawBSMSNode(i : Int, scale : Float, paint : Paint) {
     val w : Float = width.toFloat()
     val h : Float = height.toFloat()
     val gap : Float = w / (nodes + 1)
     val sc1 : Float = scale.divideScale(0, 2)
     val sc2 : Float = scale.divideScale(1, 2)
-    val size : Float = Math.min(w, h) / SIZE_FACTOR
+    val size : Float = gap / SIZE_FACTOR
     paint.strokeWidth = Math.min(w, h) / STROKE_FACTOR
     paint.color = FORE_GROUND_COLOR
     paint.strokeCap = Paint.Cap.ROUND
     save()
     translate(gap * (i + 1), h/2)
     rotate(90f * sc2)
-    drawLine(0f, -size, 0f, size, paint)
+    drawLine(0f, -size/2, 0f, size/2, paint)
     for (j in 0..(lines - 1)) {
+        Log.d("irFact", "${j.irFact()}")
         val sc : Float = sc1.divideScale(j, lines)
         save()
-        scale(j.irFact().toFloat(), j.iFact().toFloat())
-        drawLine(0f, size, size * sc, size, paint)
+        scale(j.irFact().getSC(), j.iFact().getSC())
+        drawLine(0f, size / 2, size * sc, size / 2, paint)
         restore()
     }
     restore()
