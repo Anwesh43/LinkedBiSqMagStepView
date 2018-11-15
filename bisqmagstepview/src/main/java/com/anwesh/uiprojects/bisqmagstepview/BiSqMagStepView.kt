@@ -19,7 +19,7 @@ val parts : Int = 2
 val scGap : Float = 0.1f / parts
 val scDiv : Double = 1.0 / parts
 val SIZE_FACTOR : Int = 3
-val STRKE_FACTOR : Int = 80
+val STROKE_FACTOR : Int = 80
 val FORE_GROUND_COLOR : Int = Color.parseColor("#283593")
 
 fun Int.getInverse() : Float = 1f / this
@@ -31,6 +31,36 @@ fun Float.getScaleFactor() : Float = Math.floor(this / scDiv).toFloat()
 fun Int.getMirror(k : Float) : Float = getInverse() * (1 - k) + k
 
 fun Float.updateScale(dir : Float, a : Int) : Float = scGap * dir * a.getMirror(getScaleFactor())
+
+fun Int.rFact() : Int = this % 2
+
+fun Int.iFact() : Int = this / 2
+
+fun Int.irFact() : Int = (rFact() + iFact()).rFact()
+
+fun Canvas.drawBSMSNode(i : Int, scale : Float, paint : Paint) {
+    val w : Float = width.toFloat()
+    val h : Float = height.toFloat()
+    val gap : Float = w / (nodes + 1)
+    val sc1 : Float = scale.divideScale(0, 2)
+    val sc2 : Float = scale.divideScale(1, 2)
+    val size : Float = Math.min(w, h) / SIZE_FACTOR
+    paint.strokeWidth = Math.min(w, h) / STROKE_FACTOR
+    paint.color = FORE_GROUND_COLOR
+    paint.strokeCap = Paint.Cap.ROUND
+    save()
+    translate(gap * (i + 1), h/2)
+    rotate(90f * sc2)
+    drawLine(0f, -size, 0f, size, paint)
+    for (j in 0..(lines - 1)) {
+        val sc : Float = sc1.divideScale(j, lines)
+        save()
+        scale(j.irFact().toFloat(), j.iFact().toFloat())
+        drawLine(0f, size, size * sc, size, paint)
+        restore()
+    }
+    restore()
+}
 
 class BiSqMagStepView(ctx : Context) : View(ctx) {
 
